@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beast beautitemplate='Standard' beautistatus='noAutoSetClockRate' 
+	namespace="beast.core
+    :beast.evolution.alignment
+    :beast.evolution.tree.coalescent
+    :beast.core.util
+    :beast.evolution.nuc
+    :beast.evolution.operators
+    :beast.evolution.sitemodel
+    :beast.evolution.substitutionmodel
+    :beast.evolution.likelihood
+    :bdmmprime.util.operators
+    :bdmmprime.util.priors
+    :feast.parameter" required="" version="2.6">
+        
+
+<!-- Alignment -->
+    <data
+id="HAcar"
+spec="feast.fileio.AlignmentFromFasta"
+fileName = "HAcarm300.fas"
+name="alignment"/>
+                                
+    
+<!-- Map elements -->
+    <map name="Uniform" >beast.math.distributions.Uniform</map>
+    <map name="Exponential" >beast.math.distributions.Exponential</map>   
+    <map name="LogNormal" >beast.math.distributions.LogNormalDistributionModel</map> 
+    <map name="Normal" >beast.math.distributions.Normal</map> 
+    <map name="Beta" >beast.math.distributions.Beta</map>
+    <map name="Gamma" >beast.math.distributions.Gamma</map>
+    <map name="LaplaceDistribution" >beast.math.distributions.LaplaceDistribution</map>
+    <map name="prior" >beast.math.distributions.Prior</map>
+    <map name="InverseGamma" >beast.math.distributions.InverseGamma</map>
+    <map name="OneOnX" >beast.math.distributions.OneOnX</map>
+
+
+<!-- MCMC -->
+    <run id="mcmc" spec="MCMC" chainLength="5000000" numInitializationAttempts="100">
+            
+    <!-- State -->
+        <state id="state" spec="State" storeEvery="5000">        
+            <tree id="Tree.t:HAcar" spec="beast.evolution.tree.Tree" name="stateNode">              
+                <trait id="dateTrait.t:HAcar" spec="feast.fileio.TraitSetFromTaxonSet" 
+                	dateFormat="yyyy-M-dd" 
+                	traitname="date" 
+                	delimiter= "|"
+                	takeGroup="5">                                  
+                    <taxa id="TaxonSet.HAcar" spec="TaxonSet">                                          
+                        <alignment idref="HAcar"/>                                       
+                    </taxa>                               
+                </trait>                         
+                <taxonset idref="TaxonSet.HAcar"/>                     
+            </tree>                 
+            <parameter id="kappa" spec="parameter.RealParameter" lower="0.0" name="stateNode">2.0</parameter>                  
+            <parameter id="ucldStdev" spec="parameter.RealParameter" lower="0.0" name="stateNode">0.1</parameter>                  
+            <stateNode id="rateCategories" spec="parameter.IntegerParameter" dimension="484">1</stateNode>                 
+            <parameter id="originBDMMPrime" spec="parameter.RealParameter" name="stateNode">6.0</parameter>                 
+            <parameter id="R0Epi" spec="parameter.RealParameter" dimension="56" name="stateNode">0.0 0.0 1.0 1.0
+                                                                                                 0.0 0.0 1.0 1.0 
+            																					 0.0 0.0 1.0 1.0 
+            																					 0.0 0.0 1.0 1.0
+                                                                                                 0.0 0.0 1.0 1.0 
+            																					 0.0 0.0 1.0 1.0 
+            																					 0.0 0.0 1.0 1.0
+                                                                                                 0.0 0.0 1.0 1.0
+                                                                                                 0.0 0.0 1.0 1.0
+                                                                                                 0.0 0.0 1.0 1.0
+                                                                                                 0.0 0.0 1.0 1.0
+                                                                                                 0.0 0.0 1.0 1.0
+                                                                                                 0.0 0.0 1.0 1.0
+                                                                                                 0.0 0.0 1.0 1.0</parameter>
+            <parameter id="becomeUninfectiousRateEpi" spec="parameter.RealParameter" dimension="8" name="stateNode">0.5 0.6 1.0 1.2 
+                                                                                                                    0.7 0.8 1.1 1.3</parameter>               
+            <parameter id="samplingProportionEpi" spec="parameter.RealParameter" dimension="8" lower="0.0" name="stateNode" upper="1.0">0.1 0.2 0.7 0.8
+                                                                                                                                        0.11 0.21 0.71 0.81</parameter>
+            
+            <parameter id="R0AmongDemesEpi" spec="parameter.RealParameter" dimension="168" name="stateNode">0.0 0.0 0.0 0.0 0.0 0.0 0.6 0.0 1.0 0.0 0.6 1.0
+                                                                                                            0.0 0.0 0.0 0.0 0.0 0.0 0.6 0.0 1.0 0.0 0.6 1.0
+                                                                                                            0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 1.0
+                                                                                                            0.0 0.0 0.0 0.0 0.0 0.0 0.6 0.0 1.0 0.0 0.6 1.0
+                                                                                                            0.0 0.0 0.0 0.0 0.0 0.0 0.6 0.0 1.0 0.0 0.6 1.0
+                                                                                                            0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 1.0
+                                                                                                            0.0 0.0 0.0 0.0 0.0 0.0 0.6 0.0 1.0 0.0 0.6 1.0
+          																								    0.0 0.0 0.0 0.0 0.0 0.0 0.6 0.0 1.0 0.0 0.6 1.0
+                                                                                                            0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 1.0
+        																								    0.0 0.0 0.0 0.0 0.0 0.0 0.6 0.0 1.0 0.0 0.6 1.0
+                                                                                                            0.0 0.0 0.0 0.0 0.0 0.0 0.6 0.0 1.0 0.0 0.6 1.0
+                                                                                                            0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 1.0
+                                                                                                            0.0 0.0 0.0 0.0 0.0 0.0 0.6 0.0 1.0 0.0 0.6 1.0
+                                                                                                            0.0 0.0 0.0 0.0 0.0 0.0 0.6 0.0 1.0 0.0 0.6 1.0</parameter>
+            <parameter id="ucldMean" spec="parameter.RealParameter" name="stateNode">1.0E-4</parameter>                  
+            <parameter id="gammaShape" spec="parameter.RealParameter" name="stateNode">1.0</parameter>                  
+            <parameter id="freqParameter" spec="parameter.RealParameter" dimension="4" lower="0.0" name="stateNode" upper="1.0">0.25</parameter>              
+        </state>
+        
+
+    <!-- Tree initialiser -->    
+        <init id="RandomTree.t:HAcar" spec="beast.evolution.tree.RandomTree" estimate="false" initial="@Tree.t:HAcar" taxa="@HAcar">                
+            <populationModel id="ConstantPopulation0.t:HAcar" spec="ConstantPopulation">                       
+                <parameter id="randomPopSize.t:HAcar" spec="parameter.RealParameter" name="popSize">0.001</parameter>                    
+            </populationModel>             
+        </init>
+        
+    
+    <!-- Posterior Distribution -->
+        <distribution id="posterior" spec="util.CompoundDistribution">
+           
+            <!-- Prior distribution -->         
+            <distribution id="prior" spec="util.CompoundDistribution">
+                           
+                <!-- BDMM-Prime distribution --> 
+                <distribution id="BDMMPrime" spec="bdmmprime.distribution.BirthDeathMigrationDistribution" conditionOnSurvival="false" tree="@Tree.t:HAcar">
+                    
+                    <!-- Parameterization BDMM-Prime -->
+                    <parameterization id="EpiBDMMPrimeParameterization" spec="bdmmprime.parameterization.EpiParameterization" origin="@originBDMMPrime">
+                                            
+                        <R0 id="R0SVEpi" spec="bdmmprime.parameterization.SkylineVectorParameter" origin="@originBDMMPrime" skylineValues="@R0Epi" timesAreAges="true">    
+                            <typeSet id="typeSetBDMMPrime" spec="bdmmprime.parameterization.TypeSet">                                                      
+                                <typeTraitSet id="typeTraitSet.t:HAcar" spec="feast.fileio.TraitSetFromTaxonSet" traitname="type" delimiter="|" takeGroup="1">    
+                                    <taxa id="TaxonSet.1" spec="TaxonSet" alignment="@HAcar"/>                                                             
+                                </typeTraitSet>                                                    
+                            </typeSet>   
+                            <parameter id="R0ChangeTimesEpi" spec="TimeParameter" dimension="13" estimate="false" name="changeTimes" time="2017-01-31 2016-09-01 2016-06-01 2016-01-31 2015-09-01 2015-06-01 2015-01-31 2014-09-01 2014-06-01 2014-01-31 2013-09-01 2013-06-01 2013-03-31" mostRecentSampleTime="2017-04-27" timeFormat="yyyy-M-dd"/>    
+                        </R0>
+                                            
+                        <becomeUninfectiousRate id="becomeUninfectiousRateSVEpi" spec="bdmmprime.parameterization.SkylineVectorParameter" origin="@originBDMMPrime" skylineValues="@becomeUninfectiousRateEpi" timesAreAges="true" typeSet="@typeSetBDMMPrime">
+                            <parameter id="becomeUninfectiousRateChangeTimesEpi" spec="TimeParameter" dimension="1" estimate="false" name="changeTimes" time="2016-09-01" mostRecentSampleTime="2017-04-27" timeFormat="yyyy-M-dd"/> 
+                        </becomeUninfectiousRate>
+                                            
+                        <samplingProportion id="samplingProportionSVEpi" spec="bdmmprime.parameterization.SkylineVectorParameter" origin="@originBDMMPrime" skylineValues="@samplingProportionEpi" timesAreAges="true" typeSet="@typeSetBDMMPrime">
+                            <parameter id="samplingProportionChangeTimesEpi" spec="TimeParameter" dimension="1" estimate="false" name="changeTimes" time="2016-09-01" mostRecentSampleTime="2017-04-27" timeFormat="yyyy-M-dd"/>                                           
+                        </samplingProportion>
+
+                        <rhoSampling id="rhoSamplingProbTPEpi" spec="bdmmprime.parameterization.TimedParameter" origin="@originBDMMPrime" timesAreAges="true" typeSet="@typeSetBDMMPrime"/>
+                                            
+                        <removalProb id="removalProbSVEpi" spec="bdmmprime.parameterization.SkylineVectorParameter" origin="@originBDMMPrime" timesAreAges="true" typeSet="@typeSetBDMMPrime">    
+                            <parameter id="removalProbEpi" spec="parameter.RealParameter" estimate="false" lower="0.0" name="skylineValues" upper="1.0">1.0</parameter>                                     
+                        </removalProb>
+                    
+                        <R0AmongDemes id="R0AmongDemesSMEpi" spec="bdmmprime.parameterization.SkylineMatrixParameter" origin="@originBDMMPrime" skylineValues="@R0AmongDemesEpi" timesAreAges="true" typeSet="@typeSetBDMMPrime"> 
+						  <parameter id="R0AmongDemesChangeTimesEpi" spec="TimeParameter" dimension="13" estimate="false" name="changeTimes" time="2017-01-31 2016-09-01 2016-06-01 2016-01-31 2015-09-01 2015-06-01 2015-01-31 2014-09-01 2014-06-01 2014-01-31 2013-09-01 2013-06-01 2013-03-31" mostRecentSampleTime="2017-04-27" timeFormat="yyyy-M-dd"/> 
+                        </R0AmongDemes>
+
+                        <typeSet idref="typeSetBDMMPrime"/>
+                                        
+                    </parameterization>
+                                    
+                    <parameter id="typeFrequencies" spec="parameter.RealParameter" dimension="4" estimate="false" lower="0.0" name="frequencies" upper="1.0">0.0 0.0 1.0 0.0</parameter>
+                                    
+                    <typeTraitSet idref="typeTraitSet.t:HAcar"/>
+                                
+                </distribution>
+                
+		<!-- Priors on parameters -->            
+                <distribution id="R0Epi_LBM" spec="OUSkyGridPrior2" x="@R0Epi" classToExclude="0.2">
+                    <parameter id="RealParameter.3" spec="parameter.RealParameter" estimate="false" name="M">0</parameter>
+                    <parameter id="RealParameter.4" spec="parameter.RealParameter" estimate="false" lower="0.0" name="S" upper="5.0">1</parameter>
+                    <parameter id="theta.2" spec="parameter.RealParameter" estimate="false" lower="0.0" name="theta" upper="5.0">1.0</parameter> 
+                </distribution>
+
+                <distribution id="becomeUninfectiousRate_LBM" spec="SmartZeroExcludingPrior" x="@becomeUninfectiousRateEpi" classToExclude="0.5 0.6 0.7 0.8">    
+                    <LogNormal id="LogNormalDistributionModel.1" meanInRealSpace="true" name="distr">                                         
+                        <parameter id="RealParameter.5" spec="parameter.RealParameter" estimate="false" name="M">24.0</parameter>                                         
+                        <parameter id="RealParameter.6" spec="parameter.RealParameter" estimate="false" lower="0.0" name="S" upper="5.0">0.6</parameter>
+                    </LogNormal>                             
+                </distribution>
+
+                <distribution id="becomeUninfectiousRate_H" spec="SmartZeroExcludingPrior" x="@becomeUninfectiousRateEpi" classToExclude="1.0 1.1 1.2 1.3">    
+                    <LogNormal id="LogNormalDistributionModel.2" meanInRealSpace="true" name="distr">                                         
+                        <parameter id="RealParameter.5.0" spec="parameter.RealParameter" estimate="false" name="M">36.0</parameter>                                         
+                        <parameter id="RealParameter.6.0" spec="parameter.RealParameter" estimate="false" lower="0.0" name="S" upper="5.0">0.6</parameter>
+                    </LogNormal>                             
+                </distribution>
+                            
+                <prior id="FrequenciesPrior" name="distribution" x="@freqParameter">                                
+                    <Uniform id="Uniform.1" name="distr"/>                              
+                </prior>
+                            
+                <prior id="GammaShapePrior" name="distribution" x="@gammaShape">                                  
+                    <Exponential id="Exponential.1" name="distr">                                     
+                        <parameter id="RealParameter.7" spec="parameter.RealParameter" estimate="false" name="mean">1.0</parameter>                                      
+                    </Exponential>                              
+                </prior>
+                            
+                <prior id="KappaPrior" name="distribution" x="@kappa">                                  
+                    <LogNormal id="LogNormalDistributionModel.3" name="distr">                                          
+                        <parameter id="RealParameter.8" spec="parameter.RealParameter" estimate="false" name="M">1.0</parameter>                                          
+                        <parameter id="RealParameter.9" spec="parameter.RealParameter" estimate="false" name="S">1.25</parameter>                                      
+                    </LogNormal>                               
+                </prior>
+
+                <distribution id="R0AmongDemesEpi_LBM_H" spec="OUSkyGridPrior2" x="@R0AmongDemesEpi" classToExclude="1.0">
+                    <parameter id="RealParameter.12" spec="parameter.RealParameter" estimate="false" name="M">0.0</parameter>
+                    <parameter id="RealParameter.13" spec="parameter.RealParameter" estimate="false" lower="0.0" name="S" upper="5.0">1.0</parameter>
+                    <parameter id="theta.4" spec="parameter.RealParameter" estimate="false" lower="0.0" name="theta" upper="5.0">1.0</parameter> 
+                </distribution>
+
+ 				<distribution id="R0AmongDemesEpi_LBM_LBM" spec="OUSkyGridPrior2" x="@R0AmongDemesEpi" classToExclude="0.6">
+                    <parameter id="RealParameter.14" spec="parameter.RealParameter" estimate="false" name="M">0.0</parameter>
+                    <parameter id="RealParameter.15" spec="parameter.RealParameter" estimate="false" lower="0.0" name="S" upper="5.0">1.0</parameter>
+                    <parameter id="theta.5" spec="parameter.RealParameter" estimate="false" lower="0.0" name="theta" upper="5.0">1.0</parameter> 
+                </distribution>
+
+                <prior id="originBDMMPrimePrior" name="distribution" x="@originBDMMPrime">                                  
+                    <LogNormal id="LogNormalDistributionModel.4" name="distr">                                           
+                        <parameter id="RealParameter.16" spec="parameter.RealParameter" estimate="false" name="M">1.5</parameter>                                        
+                        <parameter id="RealParameter.17" spec="parameter.RealParameter" estimate="false" lower="0.0" name="S" upper="5.0">0.05</parameter>
+                    </LogNormal>                              
+                </prior>
+                
+		        <distribution id="sp_H_N" spec="SmartZeroExcludingPrior" x="@samplingProportionEpi" classToExclude="0.2 0.7 0.8 0.21 0.71 0.81">
+			         <distr spec="beast.math.distributions.Uniform" lower="0" upper="0.174"/>
+		        </distribution>
+		        
+		        <distribution id="sp_H_S" spec="SmartZeroExcludingPrior" x="@samplingProportionEpi" classToExclude="0.1 0.7 0.8 0.11 0.71 0.81">
+			         <distr spec="beast.math.distributions.Uniform" lower="0" upper="0.289"/>
+		        </distribution>
+		
+				<distribution id="sp_LBM_N" spec="SmartZeroExcludingPrior" x="@samplingProportionEpi" classToExclude="0.1 0.2 0.8 0.11 0.21 0.81">
+			         <distr spec="beast.math.distributions.Uniform" lower="0" upper="1"/>
+		        </distribution>
+
+				<distribution id="sp_LBM_S" spec="SmartZeroExcludingPrior" x="@samplingProportionEpi" classToExclude="0.1 0.2 0.7 0.11 0.21 0.71">
+			         <distr spec="beast.math.distributions.Uniform" lower="0" upper="0.846"/>
+		        </distribution>
+
+                <prior id="MeanRatePrior" name="distribution" x="@ucldMean">                                  
+                    <LogNormal id="LogNormalDistributionModel.5" meanInRealSpace="true" name="distr">                                          
+                        <parameter id="RealParameter.18" spec="parameter.RealParameter" estimate="false" name="M">0.001</parameter>
+                        <parameter id="RealParameter.19" spec="parameter.RealParameter" estimate="false" lower="0.0" name="S" upper="5.0">1.25</parameter>
+                    </LogNormal>                            
+                </prior>
+                            
+                <prior id="ucldStdevPrior" name="distribution" x="@ucldStdev">                                 
+                    <Gamma id="Gamma.0" name="distr">                                          
+                        <parameter id="RealParameter.20" spec="parameter.RealParameter" estimate="false" name="alpha">0.5396</parameter>
+                        <parameter id="RealParameter.21" spec="parameter.RealParameter" estimate="false" name="beta">0.3819</parameter>
+                    </Gamma>                              
+                </prior>                     
+            </distribution>
+            
+
+             <!-- Likelihood -->        
+            <distribution id="likelihood" spec="util.CompoundDistribution" useThreads="true">                           
+                <distribution id="treeLikelihood" spec="ThreadedTreeLikelihood" data="@HAcar" tree="@Tree.t:HAcar">                                   
+                    
+		    		<siteModel id="SiteModel" spec="SiteModel" gammaCategoryCount="4" shape="@gammaShape">                                            
+                        <parameter id="mutationRate" spec="parameter.RealParameter" estimate="false" name="mutationRate">1.0</parameter>                                          
+                        <parameter id="proportionInvariant" spec="parameter.RealParameter" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
+                        <substModel id="hky" spec="HKY" kappa="@kappa">                                                  
+                            <frequencies id="estimatedFreqs" spec="Frequencies" frequencies="@freqParameter"/>                                              
+                        </substModel>                                       
+                    </siteModel>
+                                    
+                    <branchRateModel id="RelaxedClock" spec="beast.evolution.branchratemodel.UCRelaxedClockModel" clock.rate="@ucldMean" rateCategories="@rateCategories" tree="@Tree.t:HAcar">    
+                    	<LogNormal id="LogNormalDistributionModel.6" S="@ucldStdev" meanInRealSpace="true" name="distr">                                                 
+                            <parameter id="RealParameter.22" spec="parameter.RealParameter" estimate="false" lower="0.0" name="M" upper="1.0">1.0</parameter>                                              
+                        </LogNormal>                                     
+                    </branchRateModel>
+                                
+                </distribution>                      
+            </distribution>              
+        </distribution>
+            
+	<!-- Operators -->
+        <operator id="KappaScaler" spec="ScaleOperator" parameter="@kappa" scaleFactor="0.5" weight="0.1"/>           
+        <operator id="ucldStdevScaler" spec="ScaleOperator" parameter="@ucldStdev" scaleFactor="0.5" weight="3.0"/>           
+        <operator id="CategoriesRandomWalk" spec="IntRandomWalkOperator" parameter="@rateCategories" weight="10.0" windowSize="1"/>           
+        <operator id="CategoriesSwapOperator" spec="SwapOperator" intparameter="@rateCategories" weight="10.0"/>           
+        <operator id="CategoriesUniform" spec="UniformOperator" parameter="@rateCategories" weight="10.0"/>           
+        <operator id="BDMMPrimeWilsonBalding" spec="WilsonBalding" tree="@Tree.t:HAcar" weight="10.0"/>           
+        <operator id="BDMMPrimeWide" spec="Exchange" isNarrow="false" tree="@Tree.t:HAcar" weight="10.0"/>           
+        <operator id="BDMMPrimeNarrow" spec="Exchange" tree="@Tree.t:HAcar" weight="10.0"/>            
+        <operator id="BDMMPrimeUniformOperator" spec="Uniform" tree="@Tree.t:HAcar" weight="20.0"/>          
+        <operator id="BDMMPrimeTreeRootScaler" spec="ScaleOperator" rootOnly="true" scaleFactor="0.95" tree="@Tree.t:HAcar" weight="1.0"/>           
+        <operator id="BDMMPrimeTreeScaler" spec="ScaleOperator" scaleFactor="0.95" tree="@Tree.t:HAcar" weight="3.0"/>           
+        <operator id="originBDMMPrimeScaler" spec="ScaleOperator" parameter="@originBDMMPrime" scaleFactor="0.75" weight="3.0"/>            
+        <operator id="R0EpiScaler" spec="ScaleOperator" parameter="@R0Epi" scaleFactor="0.75" weight="3.0"/>            
+        <operator id="becomeUninfectiousRateEpiScaler" spec="ScaleOperator" parameter="@becomeUninfectiousRateEpi" scaleFactor="0.75" weight="3.0"/>
+        <operator id="samplingProportionEpiScaler" spec="ScaleOperator" parameter="@samplingProportionEpi" scaleFactor="0.75" weight="3.0"/>          
+        <operator id="R0AmongDemesEpiScaler" spec="ScaleOperator" parameter="@R0AmongDemesEpi" scaleFactor="0.75" weight="3.0"/> 
+		<operator id="ucldMeanScaler" spec="ScaleOperator" parameter="@ucldMean" scaleFactor="0.5" weight="1.0"/>          
+        <operator id="relaxedUpDownOperator" spec="UpDownOperator" scaleFactor="0.75" weight="3.0">                  
+            <up idref="ucldMean"/>                   
+            <down idref="Tree.t:HAcar"/>                
+        </operator>           
+        <operator id="gammaShapeScaler" spec="ScaleOperator" parameter="@gammaShape" scaleFactor="0.5" weight="0.1"/>           
+        <operator id="FrequenciesExchanger" spec="DeltaExchangeOperator" delta="0.01" weight="0.1">                   
+            <parameter idref="freqParameter"/>              
+        </operator>
+            
+        <logger id="tracelog" spec="Logger" fileName="HAcar.log" logEvery="10000" model="@posterior" sanitiseHeaders="true" sort="smart">                  
+            <log idref="posterior"/>                  
+            <log idref="likelihood"/>                   
+            <log idref="prior"/>                   
+            <log idref="treeLikelihood"/>                   
+            <log id="TreeHeight" spec="beast.evolution.tree.TreeHeightLogger" tree="@Tree.t:HAcar"/>                   
+            <log idref="kappa"/>                  
+            <log idref="ucldStdev"/>                   
+            <log id="rate" spec="beast.evolution.branchratemodel.RateStatistic" branchratemodel="@RelaxedClock" tree="@Tree.t:HAcar"/>                 
+            <log idref="originBDMMPrime"/>                   
+            <log idref="R0SVEpi"/>                  
+            <log idref="R0AmongDemesSMEpi"/>                 
+            <log idref="becomeUninfectiousRateSVEpi"/>
+	        <log idref="samplingProportionSVEpi"/>                   
+            <log idref="removalProbSVEpi"/>                   
+            <log idref="rhoSamplingProbTPEpi"/>                   
+            <log idref="ucldMean"/>                   
+            <log idref="gammaShape"/>                   
+            <log idref="freqParameter"/>               
+        </logger>
+            
+        <logger id="screenlog" spec="Logger" logEvery="1000">                  
+            <log idref="posterior"/>                    
+            <log idref="likelihood"/>                  
+            <log idref="prior"/>
+            <log idref="samplingProportionEpi"/>
+                            
+        </logger>
+            
+        <logger id="treelog" spec="Logger" fileName="$(tree).trees" logEvery="10000" mode="tree">                   
+            <log id="TreeWithMetaDataLogger" spec="beast.evolution.tree.TreeWithMetaDataLogger" branchratemodel="@RelaxedClock" tree="@Tree.t:HAcar"/>               
+        </logger>
+           
+        <operatorschedule id="OperatorSchedule" spec="OperatorSchedule"/>
+        
+    </run>
+    
+</beast>

@@ -1,0 +1,868 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beast namespace="beast.core
+                  :beast.core.parameter
+                  :beast.evolution.alignment
+                  :beast.evolution.tree
+                  :feast.expressions
+                  :feast.function
+                  :feast.fileio
+                  :feast.fileio.logfileiterator
+                  :feast.parameter
+                  :bdmmprime.distribution
+                  :bdmmprime.parameterization
+                  :bdmmprime.mapping" version="2.0">
+
+
+  <!-- Alignment-->
+  <data
+  id="HAcar"
+  spec= "feast.fileio.AlignmentFromFasta"
+  fileName = "HAcarm300.fas"
+  name="alignment"/>
+
+  <!-- Modify parameterization to match the one from the analysis-->
+  <distribution id="BDMMPrime" spec="BirthDeathMigrationDistribution" conditionOnSurvival="false" tree="@tree"> 
+    <parameterization id="EpiBDMMPrimeParameterization" spec="EpiParameterization" origin="@origin">
+      
+      <R0 spec="SkylineVectorParameter" typeSet="@typeSet" timesAreAges="true" origin="@origin">
+        <skylineValues idref="R0"/>
+        <parameter id="R0ChangeTimesEpi" spec="TimeParameter" estimate="false" name="changeTimes" time="2017-01-31 2016-09-01 2016-06-01 2016-01-31 2015-09-01 2015-06-01 2015-01-31 2014-09-01 2014-06-01 2014-01-31 2013-09-01 2013-06-01 2013-03-31" mostRecentSampleTime="2017-04-27" timeFormat="yyyy-M-dd"/>                    
+      </R0>
+
+      <R0AmongDemes spec="SkylineMatrixParameter" timesAreAges="true" typeSet="@typeSet" origin="@origin">
+        <skylineValues idref="R0AmongDemes"/>
+        <parameter id="R0AmongDemesChangeTimesEpi" spec="TimeParameter" estimate="false" name="changeTimes" time="2017-01-31 2016-09-01 2016-06-01 2016-01-31 2015-09-01 2015-06-01 2015-01-31 2014-09-01 2014-06-01 2014-01-31 2013-09-01 2013-06-01 2013-03-31" mostRecentSampleTime="2017-04-27" timeFormat="yyyy-M-dd"/> 
+      </R0AmongDemes>
+
+      <becomeUninfectiousRate spec="SkylineVectorParameter" typeSet="@typeSet">
+        <skylineValues idref="becomeUninfectiousRate"/>
+        <parameter id="becomeUninfectiousRateChangeTimesEpi" spec="TimeParameter" estimate="false" name="changeTimes" time="2016-09-01" mostRecentSampleTime="2017-04-27" timeFormat="yyyy-M-dd"/>
+      </becomeUninfectiousRate>
+
+      <samplingProportion spec="SkylineVectorParameter" typeSet="@typeSet" timesAreAges="true" origin="@origin">
+        <skylineValues idref="samplingProportion"/>
+        <parameter id="samplingProportionChangeTimesEpi" spec="TimeParameter" estimate="false" name="changeTimes" time="2016-09-01" mostRecentSampleTime="2017-04-27" timeFormat="yyyy-M-dd"/>  
+      </samplingProportion>
+
+      <removalProb spec="SkylineVectorParameter" typeSet="@typeSet">
+        <skylineValues idref="removalProb"/>
+      </removalProb>
+
+      <typeSet id="typeSet" spec="bdmmprime.parameterization.TypeSet">
+        <typeTraitSet id="typeTraitSet" spec="TraitSetFromTaxonSet" traitname="type" delimiter="|" takeGroup="1"> 
+          <taxa id="TaxonSet.1" spec="TaxonSet" alignment="@HAcar"/> 
+        </typeTraitSet>
+      </typeSet>
+
+    </parameterization>
+
+    <parameter id="typeFrequencies" spec="RealParameter" dimension="4" estimate="false" lower="0.0" name="frequencies" upper="1.0">0.0 0.0 1.0 0.0</parameter> 
+
+    <typeTraitSet idref="typeTraitSet"/>
+
+  </distribution>
+
+  <!-- Log file iterator, modify to match parameters from the analysis -->
+   <run spec="LogFileIterator">
+    <!-- Trace log for the analysis-->
+    <logFileState spec="TraceLogFileState" logFileName="HAcar_combined.Sub.log"> 
+
+      <logFileEntry spec="LogFileRealParameter" fieldName="originBDMMPrime"> 
+        <fieldParameter id="origin" spec="RealParameter" value="0.0"/>
+      </logFileEntry>
+
+       <!-- R0 -->
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii13_Human_N" fieldParameterIndex="0">
+        <fieldParameter id="R0" spec="RealParameter" value="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+                                                            0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
+                                                            0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii13_Human_S" fieldParameterIndex="1">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii13_LBM_N" fieldParameterIndex="2">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii13_LBM_S" fieldParameterIndex="3">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii12_Human_N" fieldParameterIndex="4">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii12_Human_S" fieldParameterIndex="5">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii12_LBM_N" fieldParameterIndex="6">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii12_LBM_S" fieldParameterIndex="7">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii11_Human_N" fieldParameterIndex="8">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii11_Human_S" fieldParameterIndex="9">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii11_LBM_N" fieldParameterIndex="10">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii11_LBM_S" fieldParameterIndex="11">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii10_Human_N" fieldParameterIndex="12">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii10_Human_S" fieldParameterIndex="13">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii10_LBM_N" fieldParameterIndex="14">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii10_LBM_S" fieldParameterIndex="15">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii9_Human_N" fieldParameterIndex="16">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii9_Human_S" fieldParameterIndex="17">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii9_LBM_N" fieldParameterIndex="18">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii9_LBM_S" fieldParameterIndex="19">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii8_Human_N" fieldParameterIndex="20">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii8_Human_S" fieldParameterIndex="21">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii8_LBM_N" fieldParameterIndex="22">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii8_LBM_S" fieldParameterIndex="23">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii7_Human_N" fieldParameterIndex="24">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii7_Human_S" fieldParameterIndex="25">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii7_LBM_N" fieldParameterIndex="26">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii7_LBM_S" fieldParameterIndex="27">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii6_Human_N" fieldParameterIndex="28">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii6_Human_S" fieldParameterIndex="29">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii6_LBM_N" fieldParameterIndex="30">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii6_LBM_S" fieldParameterIndex="31">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii5_Human_N" fieldParameterIndex="32">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii5_Human_S" fieldParameterIndex="33">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii5_LBM_N" fieldParameterIndex="34">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii5_LBM_S" fieldParameterIndex="35">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+        <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii4_Human_N" fieldParameterIndex="36">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii4_Human_S" fieldParameterIndex="37">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii4_LBM_N" fieldParameterIndex="38">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii4_LBM_S" fieldParameterIndex="39">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+        <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii3_Human_N" fieldParameterIndex="40">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii3_Human_S" fieldParameterIndex="41">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii3_LBM_N" fieldParameterIndex="42">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii3_LBM_S" fieldParameterIndex="43">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+        <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii2_Human_N" fieldParameterIndex="44">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii2_Human_S" fieldParameterIndex="45">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii2_LBM_N" fieldParameterIndex="46">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii2_LBM_S" fieldParameterIndex="47">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+        <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii1_Human_N" fieldParameterIndex="48">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii1_Human_S" fieldParameterIndex="49">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii1_LBM_N" fieldParameterIndex="50">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii1_LBM_S" fieldParameterIndex="51">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+        <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii0_Human_N" fieldParameterIndex="52">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii0_Human_S" fieldParameterIndex="53">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii0_LBM_N" fieldParameterIndex="54">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0SVEpii0_LBM_S" fieldParameterIndex="55">
+        <fieldParameter idref="R0"/>
+      </logFileEntry>
+      
+      <!-- BecomeUninfectious rates -->
+      <logFileEntry spec="LogFileRealParameter" fieldName="becomeUninfectiousRateSVEpii1_Human_N" fieldParameterIndex="0"> 
+        <fieldParameter id="becomeUninfectiousRate" spec="RealParameter" value="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0" />
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="becomeUninfectiousRateSVEpii1_Human_S" fieldParameterIndex="1">
+        <fieldParameter idref="becomeUninfectiousRate" />
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="becomeUninfectiousRateSVEpii1_LBM_N" fieldParameterIndex="2">
+        <fieldParameter idref="becomeUninfectiousRate" />
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="becomeUninfectiousRateSVEpii1_LBM_S" fieldParameterIndex="3">
+        <fieldParameter idref="becomeUninfectiousRate" />
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="becomeUninfectiousRateSVEpii0_Human_N" fieldParameterIndex="4"> 
+        <fieldParameter idref="becomeUninfectiousRate" />
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="becomeUninfectiousRateSVEpii0_Human_S" fieldParameterIndex="5">
+        <fieldParameter idref="becomeUninfectiousRate" />
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="becomeUninfectiousRateSVEpii0_LBM_N" fieldParameterIndex="6">
+        <fieldParameter idref="becomeUninfectiousRate" />
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="becomeUninfectiousRateSVEpii0_LBM_S" fieldParameterIndex="7">
+        <fieldParameter idref="becomeUninfectiousRate" />
+      </logFileEntry>
+
+      <!-- R0AmongDemes -->
+
+<logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii13_Human_N_to_Human_S" fieldParameterIndex="0">
+        <fieldParameter id="R0AmongDemes" spec="RealParameter" value="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+                                                            0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
+                                                            0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+                                                            0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
+                                                            0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+                                                            0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
+                                                            0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 
+                                                            0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
+                                                            0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"/>  
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii13_Human_N_to_LBM_N" fieldParameterIndex="1">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii13_Human_N_to_LBM_S" fieldParameterIndex="2">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii13_Human_S_to_Human_N" fieldParameterIndex="3">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii13_Human_S_to_LBM_N" fieldParameterIndex="4">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii13_Human_S_to_LBM_S" fieldParameterIndex="5">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii13_LBM_N_to_Human_N" fieldParameterIndex="6">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii13_LBM_N_to_Human_S" fieldParameterIndex="7">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii13_LBM_N_to_LBM_S" fieldParameterIndex="8">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+       <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii13_LBM_S_to_Human_N" fieldParameterIndex="9">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii13_LBM_S_to_Human_S" fieldParameterIndex="10">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii13_LBM_S_to_LBM_N" fieldParameterIndex="11">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+
+<logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii12_Human_N_to_Human_S" fieldParameterIndex="12">
+        <fieldParameter idref="R0AmongDemes"/>  
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii12_Human_N_to_LBM_N" fieldParameterIndex="13">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii12_Human_N_to_LBM_S" fieldParameterIndex="14">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii12_Human_S_to_Human_N" fieldParameterIndex="15">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii12_Human_S_to_LBM_N" fieldParameterIndex="16">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii12_Human_S_to_LBM_S" fieldParameterIndex="17">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii12_LBM_N_to_Human_N" fieldParameterIndex="18">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii12_LBM_N_to_Human_S" fieldParameterIndex="19">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii12_LBM_N_to_LBM_S" fieldParameterIndex="20">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+       <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii12_LBM_S_to_Human_N" fieldParameterIndex="21">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii12_LBM_S_to_Human_S" fieldParameterIndex="22">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii12_LBM_S_to_LBM_N" fieldParameterIndex="23">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+
+<logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii11_Human_N_to_Human_S" fieldParameterIndex="24">
+        <fieldParameter idref="R0AmongDemes"/>  
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii11_Human_N_to_LBM_N" fieldParameterIndex="25">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii11_Human_N_to_LBM_S" fieldParameterIndex="26">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii11_Human_S_to_Human_N" fieldParameterIndex="27">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii11_Human_S_to_LBM_N" fieldParameterIndex="28">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii11_Human_S_to_LBM_S" fieldParameterIndex="29">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii11_LBM_N_to_Human_N" fieldParameterIndex="30">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii11_LBM_N_to_Human_S" fieldParameterIndex="31">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii11_LBM_N_to_LBM_S" fieldParameterIndex="32">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+       <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii11_LBM_S_to_Human_N" fieldParameterIndex="33">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii11_LBM_S_to_Human_S" fieldParameterIndex="34">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii11_LBM_S_to_LBM_N" fieldParameterIndex="35">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+
+<logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii10_Human_N_to_Human_S" fieldParameterIndex="36">
+        <fieldParameter idref="R0AmongDemes"/>  
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii10_Human_N_to_LBM_N" fieldParameterIndex="37">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii10_Human_N_to_LBM_S" fieldParameterIndex="38">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii10_Human_S_to_Human_N" fieldParameterIndex="39">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii10_Human_S_to_LBM_N" fieldParameterIndex="40">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii10_Human_S_to_LBM_S" fieldParameterIndex="41">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii10_LBM_N_to_Human_N" fieldParameterIndex="42">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii10_LBM_N_to_Human_S" fieldParameterIndex="43">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii10_LBM_N_to_LBM_S" fieldParameterIndex="44">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+       <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii10_LBM_S_to_Human_N" fieldParameterIndex="45">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii10_LBM_S_to_Human_S" fieldParameterIndex="46">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii10_LBM_S_to_LBM_N" fieldParameterIndex="47">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii9_Human_N_to_Human_S" fieldParameterIndex="48">
+        <fieldParameter idref="R0AmongDemes"/>  
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii9_Human_N_to_LBM_N" fieldParameterIndex="49">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii9_Human_N_to_LBM_S" fieldParameterIndex="50">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii9_Human_S_to_Human_N" fieldParameterIndex="51">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii9_Human_S_to_LBM_N" fieldParameterIndex="52">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii9_Human_S_to_LBM_S" fieldParameterIndex="53">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii9_LBM_N_to_Human_N" fieldParameterIndex="54">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii9_LBM_N_to_Human_S" fieldParameterIndex="55">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii9_LBM_N_to_LBM_S" fieldParameterIndex="56">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+       <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii9_LBM_S_to_Human_N" fieldParameterIndex="57">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii9_LBM_S_to_Human_S" fieldParameterIndex="58">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii9_LBM_S_to_LBM_N" fieldParameterIndex="59">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii8_Human_N_to_Human_S" fieldParameterIndex="60">
+        <fieldParameter idref="R0AmongDemes"/>  
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii8_Human_N_to_LBM_N" fieldParameterIndex="61">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii8_Human_N_to_LBM_S" fieldParameterIndex="62">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii8_Human_S_to_Human_N" fieldParameterIndex="63">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii8_Human_S_to_LBM_N" fieldParameterIndex="64">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii8_Human_S_to_LBM_S" fieldParameterIndex="65">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii8_LBM_N_to_Human_N" fieldParameterIndex="66">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii8_LBM_N_to_Human_S" fieldParameterIndex="67">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii8_LBM_N_to_LBM_S" fieldParameterIndex="68">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+       <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii8_LBM_S_to_Human_N" fieldParameterIndex="69">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii8_LBM_S_to_Human_S" fieldParameterIndex="70">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii8_LBM_S_to_LBM_N" fieldParameterIndex="71">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii7_Human_N_to_Human_S" fieldParameterIndex="72">
+        <fieldParameter idref="R0AmongDemes"/>  
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii7_Human_N_to_LBM_N" fieldParameterIndex="73">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii7_Human_N_to_LBM_S" fieldParameterIndex="74">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii7_Human_S_to_Human_N" fieldParameterIndex="75">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii7_Human_S_to_LBM_N" fieldParameterIndex="76">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii7_Human_S_to_LBM_S" fieldParameterIndex="77">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii7_LBM_N_to_Human_N" fieldParameterIndex="78">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii7_LBM_N_to_Human_S" fieldParameterIndex="79">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii7_LBM_N_to_LBM_S" fieldParameterIndex="80">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+       <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii7_LBM_S_to_Human_N" fieldParameterIndex="81">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii7_LBM_S_to_Human_S" fieldParameterIndex="82">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii7_LBM_S_to_LBM_N" fieldParameterIndex="83">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+       
+       <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii6_Human_N_to_Human_S" fieldParameterIndex="84">
+        <fieldParameter idref="R0AmongDemes"/>  
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii6_Human_N_to_LBM_N" fieldParameterIndex="85">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii6_Human_N_to_LBM_S" fieldParameterIndex="86">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii6_Human_S_to_Human_N" fieldParameterIndex="87">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii6_Human_S_to_LBM_N" fieldParameterIndex="88">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii6_Human_S_to_LBM_S" fieldParameterIndex="89">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii6_LBM_N_to_Human_N" fieldParameterIndex="90">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii6_LBM_N_to_Human_S" fieldParameterIndex="91">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii6_LBM_N_to_LBM_S" fieldParameterIndex="92">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+       <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii6_LBM_S_to_Human_N" fieldParameterIndex="93">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii6_LBM_S_to_Human_S" fieldParameterIndex="94">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii6_LBM_S_to_LBM_N" fieldParameterIndex="95">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+     
+     <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii5_Human_N_to_Human_S" fieldParameterIndex="96">
+        <fieldParameter idref="R0AmongDemes"/>  
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii5_Human_N_to_LBM_N" fieldParameterIndex="97">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii5_Human_N_to_LBM_S" fieldParameterIndex="98">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii5_Human_S_to_Human_N" fieldParameterIndex="99">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii5_Human_S_to_LBM_N" fieldParameterIndex="100">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii5_Human_S_to_LBM_S" fieldParameterIndex="101">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii5_LBM_N_to_Human_N" fieldParameterIndex="102">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii5_LBM_N_to_Human_S" fieldParameterIndex="103">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii5_LBM_N_to_LBM_S" fieldParameterIndex="104">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+       <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii5_LBM_S_to_Human_N" fieldParameterIndex="105">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii5_LBM_S_to_Human_S" fieldParameterIndex="106">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii5_LBM_S_to_LBM_N" fieldParameterIndex="107">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii4_Human_N_to_Human_S" fieldParameterIndex="108">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii4_Human_N_to_LBM_N" fieldParameterIndex="109">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii4_Human_N_to_LBM_S" fieldParameterIndex="110">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii4_Human_S_to_Human_N" fieldParameterIndex="111">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii4_Human_S_to_LBM_N" fieldParameterIndex="112">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii4_Human_S_to_LBM_S" fieldParameterIndex="113">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii4_LBM_N_to_Human_N" fieldParameterIndex="114">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii4_LBM_N_to_Human_S" fieldParameterIndex="115">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii4_LBM_N_to_LBM_S" fieldParameterIndex="116">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+       <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii4_LBM_S_to_Human_N" fieldParameterIndex="117">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii4_LBM_S_to_Human_S" fieldParameterIndex="118">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii4_LBM_S_to_LBM_N" fieldParameterIndex="119">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii3_Human_N_to_Human_S" fieldParameterIndex="120">
+        <fieldParameter idref="R0AmongDemes"/>  
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii3_Human_N_to_LBM_N" fieldParameterIndex="121">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii3_Human_N_to_LBM_S" fieldParameterIndex="122">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii3_Human_S_to_Human_N" fieldParameterIndex="123">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii3_Human_S_to_LBM_N" fieldParameterIndex="124">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii3_Human_S_to_LBM_S" fieldParameterIndex="125">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii3_LBM_N_to_Human_N" fieldParameterIndex="126">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii3_LBM_N_to_Human_S" fieldParameterIndex="127">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii3_LBM_N_to_LBM_S" fieldParameterIndex="128">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+       <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii3_LBM_S_to_Human_N" fieldParameterIndex="129">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii3_LBM_S_to_Human_S" fieldParameterIndex="130">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii3_LBM_S_to_LBM_N" fieldParameterIndex="131">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+       
+       <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii2_Human_N_to_Human_S" fieldParameterIndex="132">
+        <fieldParameter idref="R0AmongDemes"/>  
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii2_Human_N_to_LBM_N" fieldParameterIndex="133">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii2_Human_N_to_LBM_S" fieldParameterIndex="134">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii2_Human_S_to_Human_N" fieldParameterIndex="135">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii2_Human_S_to_LBM_N" fieldParameterIndex="136">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii2_Human_S_to_LBM_S" fieldParameterIndex="137">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii2_LBM_N_to_Human_N" fieldParameterIndex="138">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii2_LBM_N_to_Human_S" fieldParameterIndex="139">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii2_LBM_N_to_LBM_S" fieldParameterIndex="140">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+       <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii2_LBM_S_to_Human_N" fieldParameterIndex="141">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii2_LBM_S_to_Human_S" fieldParameterIndex="142">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii2_LBM_S_to_LBM_N" fieldParameterIndex="143">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+     
+     <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii1_Human_N_to_Human_S" fieldParameterIndex="144">
+        <fieldParameter idref="R0AmongDemes"/>  
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii1_Human_N_to_LBM_N" fieldParameterIndex="145">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii1_Human_N_to_LBM_S" fieldParameterIndex="146">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii1_Human_S_to_Human_N" fieldParameterIndex="147">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii1_Human_S_to_LBM_N" fieldParameterIndex="148">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii1_Human_S_to_LBM_S" fieldParameterIndex="149">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii1_LBM_N_to_Human_N" fieldParameterIndex="150">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii1_LBM_N_to_Human_S" fieldParameterIndex="151">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii1_LBM_N_to_LBM_S" fieldParameterIndex="152">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+       <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii1_LBM_S_to_Human_N" fieldParameterIndex="153">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii1_LBM_S_to_Human_S" fieldParameterIndex="154">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii1_LBM_S_to_LBM_N" fieldParameterIndex="155">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii0_Human_N_to_Human_S" fieldParameterIndex="156">
+        <fieldParameter idref="R0AmongDemes"/>  
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii0_Human_N_to_LBM_N" fieldParameterIndex="157">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii0_Human_N_to_LBM_S" fieldParameterIndex="158">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii0_Human_S_to_Human_N" fieldParameterIndex="159">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii0_Human_S_to_LBM_N" fieldParameterIndex="160">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii0_Human_S_to_LBM_S" fieldParameterIndex="161">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii0_LBM_N_to_Human_N" fieldParameterIndex="162">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii0_LBM_N_to_Human_S" fieldParameterIndex="163">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii0_LBM_N_to_LBM_S" fieldParameterIndex="164">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+       <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii0_LBM_S_to_Human_N" fieldParameterIndex="165">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii0_LBM_S_to_Human_S" fieldParameterIndex="166">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="R0AmongDemesSMEpii0_LBM_S_to_LBM_N" fieldParameterIndex="167">
+        <fieldParameter idref="R0AmongDemes"/>
+      </logFileEntry>
+
+      <!-- Sampling Proportions -->
+      <logFileEntry spec="LogFileRealParameter" fieldName="samplingProportionSVEpii1_Human_N" fieldParameterIndex="0">
+        <fieldParameter id="samplingProportion" spec="RealParameter" value="0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="samplingProportionSVEpii1_Human_S" fieldParameterIndex="1">
+        <fieldParameter idref="samplingProportion"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="samplingProportionSVEpii1_LBM_N" fieldParameterIndex="2">
+        <fieldParameter idref="samplingProportion"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="samplingProportionSVEpii1_LBM_S" fieldParameterIndex="3">
+        <fieldParameter idref="samplingProportion"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="samplingProportionSVEpii0_Human_N" fieldParameterIndex="4">
+        <fieldParameter idref="samplingProportion"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="samplingProportionSVEpii0_Human_S" fieldParameterIndex="5">
+        <fieldParameter idref="samplingProportion"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="samplingProportionSVEpii0_LBM_N" fieldParameterIndex="6">
+        <fieldParameter idref="samplingProportion"/>
+      </logFileEntry>
+      <logFileEntry spec="LogFileRealParameter" fieldName="samplingProportionSVEpii0_LBM_S" fieldParameterIndex="7">
+        <fieldParameter idref="samplingProportion"/>
+      </logFileEntry>
+
+      <!-- Removal Probability -->
+      <logFileEntry spec="LogFileRealParameter" fieldName="removalProbSVEpi">
+        <fieldParameter id="removalProb" spec="RealParameter" value="0.0"/> 
+      </logFileEntry>
+
+    </logFileState>
+
+    <!-- Tree log for the analysis-->
+    <logFileState spec="TreeLogFileState" logFileName="tree_combined.Sub.trees"> 
+      <tree spec="Tree" id="tree"/>
+    </logFileState>
+
+
+    <logger spec="Logger"
+            logEvery="10">
+      <log idref="R0"/>
+      <log idref="R0AmongDemes"/>
+      <log idref="samplingProportion"/>
+    </logger>
+
+    <!-- Typed tree log-->
+    <logger spec="Logger" fileName="$(filebase).typed.trees" logEvery="1" mode="tree">
+        <log id="typeMappedTree" spec="TypeMappedTree" bdmmDistrib="@BDMMPrime" frequencies="@typeFrequencies" mapOnInit="false" remapOnLog="true" typeLabel="type" typeTraitSet="@typeTraitSet" untypedTree="@tree"/>
+    </logger>
+
+    <!-- Typed node tree log-->
+    <logger id="nodeTypedTreeLogger" spec="Logger" fileName="$(filebase).typed.node.trees" logEvery="1" mode="tree">
+      <log id="nodeTypedTree" spec="TypedNodeTreeLogger" typedTree="@typeMappedTree"/>
+    </logger>
+
+    <!-- Trajectories log-->
+    <logger spec="Logger" logEvery="1" fileName="$(filebase).TL.traj">
+      <log id="typedTrajectoryTL" spec="bdmmprime.trajectories.SampledTrajectory"
+           nParticles="4000"
+           useTauLeaping="true"
+           minLeapCount="100"
+           epsilon="0.03"
+           typeLabel="type"
+           typeMappedTree="@typeMappedTree"
+           parameterization="@EpiBDMMPrimeParameterization"/>
+    </logger>
+  </run>
+</beast>
+
