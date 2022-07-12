@@ -1,5 +1,3 @@
-# R0 manuscript materials
-
 This repository contains the BEAST 2 XML file and R scripts associated with the manuscript "Phylodynamics of H7N9 virus at the human-live bird market interface in China".
 
 The files are organized as follows:
